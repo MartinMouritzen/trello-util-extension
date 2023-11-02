@@ -1,0 +1,29 @@
+{
+    "name": "Trello utils",
+    "description": "Improves your Trello boards with things like card colors and more.",
+    "version": "0.1.0",
+    "manifest_version": 3,
+    "icons": {
+        "16": "/images/icon-16x16.png",
+        "48": "/images/icon-48x48.png"
+    },
+    "content_scripts": [
+		{
+		  "matches": ["https://trello.com/*"],
+		  "js": ["foreground.js"]
+		}
+	  ],
+    "action": {
+        "default_icon": {
+            "16": "/images/icon-16x16.png",
+            "48": "/images/icon-48x48.png"
+        }
+    },
+    "permissions": [
+        "activeTab",
+		"scripting"
+    ],
+    "host_permissions": [
+        "https://trello.com/*"
+    ]
+}
