@@ -1,4 +1,5 @@
-var timesTriedInit = 0;
+let timesTriedInit = 0;
+let keyupTimeoutId = false;
 
 function isRGBFormat(str) {
     const rgbPattern = /^rgb\(\s*\d{1,3}\s*,\s*\d{1,3}\s*,\s*\d{1,3}\s*\)$/;
@@ -37,37 +38,42 @@ function getContrastingTextColor(hexColor) {
     return brightness > 150 ? 'black' : 'white';
 }
 function processCards() {
-	var shouldRetry = true;
-	var board = document.querySelectorAll('#board')[0];
+	let shouldRetry = true;
+	const board = document.querySelectorAll('#board')[0];
 
 	if (board) {
-		var columns = board.querySelectorAll(':scope > li');	
+		const columns = board.querySelectorAll(':scope > li');	
 
 		if (columns && columns.length > 0) {
 			columns.forEach((column) => {
-				var cardContainers = column.querySelectorAll('li');
+				const cardContainers = column.querySelectorAll('li');
 
 				if (cardContainers && cardContainers.length > 0) {
 					shouldRetry = false;
 
 					cardContainers.forEach((cardContainer) => {
-						var card = cardContainer.querySelector(':scope > div');
-						var contentDiv = card.querySelector(':scope > div');
+						const card = cardContainer.querySelector(':scope > div');
+						const contentDiv = card.querySelector(':scope > div');
 						
 						if (contentDiv) {
-							var labels = contentDiv.querySelectorAll('button');
+							const labels = contentDiv.querySelectorAll('button');
 
 							var colors = [];
 							labels.forEach((label) => {
 								label.style.boxShadow = '1px 1px 3px 0px rgba(0,0,0,0.15)';
-								if (label.innerText) {
-									var computedStyle = window.getComputedStyle(label);
-									colors.push(computedStyle.backgroundColor);
+
+								if (label['type'] == 'button') {
+									return;
 								}
+
+								const computedStyle = window.getComputedStyle(label);
+								colors.push(computedStyle.backgroundColor);
 							});
+							// Let's try only picking the first color
+							colors = colors[0] ? [colors[0]] : colors;
 							if (colors.length > 0) {
-								var textElement = contentDiv.querySelector('a');
-								let textColor = getContrastingTextColor(colors[0]);
+								const textElement = contentDiv.querySelector('a');
+								const textColor = getContrastingTextColor(colors[0]);
 
 								textElement.style.color = textColor;
 								if (textColor == 'white') {
@@ -102,9 +108,10 @@ function processCards() {
 		}
 	}
 	document.addEventListener('keyup',() => {
-		setTimeout(() => {
+		clearTimeout(keyupTimeoutId);
+		keyupTimeoutId = setTimeout(() => {
 			processCards();
-		},50);
+		},250);
 	});
 }
 processCards();
