@@ -36,7 +36,7 @@ function getContrastingTextColor(hexColor) {
     // Return black or white based on the brightness
     return brightness > 150 ? 'black' : 'white';
 }
-function init() {
+function processCards() {
 	var shouldRetry = true;
 	var board = document.querySelectorAll('#board')[0];
 
@@ -75,12 +75,15 @@ function init() {
 								}
 
 								if (colors.length == 1) {
-									card.style.backgroundColor = colors[0];
+									card.style.background = colors[0];
 								}
 								if (colors.length > 1) {
 									const gradientString = `linear-gradient(to bottom right, ${colors.join(', ')})`;
 									card.style.background = gradientString;
 								}
+							}
+							else {
+								card.style.background = '#ffffff';
 							}
 						}
 					});
@@ -92,9 +95,14 @@ function init() {
 		timesTriedInit++;
 		if (timesTriedInit < 10000) {
 			setTimeout(() => {
-				init();
+				processCards();
 			},250);
 		}
 	}
+	document.addEventListener('keyup',() => {
+		setTimeout(() => {
+			processCards();
+		},50);
+	});
 }
-init();
+processCards();
