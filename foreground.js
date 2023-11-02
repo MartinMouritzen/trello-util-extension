@@ -79,6 +79,8 @@ function processCards() {
 								}
 								if (colors.length > 1) {
 									const gradientString = `linear-gradient(to bottom right, ${colors.join(', ')})`;
+									// const stripeWidthValue = 100 / colors.length; // Calculate the width of each stripe as a number
+									// const gradientString = `repeating-linear-gradient(to bottom right, ${colors.map((color, index) => `${color} ${index * stripeWidthValue}%, ${color} ${(index + 1) * stripeWidthValue}%`).join(', ')})`
 									card.style.background = gradientString;
 								}
 							}
