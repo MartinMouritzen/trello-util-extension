@@ -89,7 +89,6 @@ function init() {
 		}
 	}
 	if (shouldRetry) {
-		console.log('retrying');
 		timesTriedInit++;
 		if (timesTriedInit < 10000) {
 			setTimeout(() => {
