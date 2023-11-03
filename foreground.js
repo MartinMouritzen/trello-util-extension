@@ -1,4 +1,3 @@
-let timesTriedInit = 0;
 let keyupTimeoutId = false;
 
 function isRGBFormat(str) {
@@ -38,7 +37,6 @@ function getContrastingTextColor(hexColor) {
     return brightness > 150 ? 'black' : 'white';
 }
 function processCards() {
-	let shouldRetry = true;
 	const board = document.querySelectorAll('#board')[0];
 
 	if (board) {
@@ -49,14 +47,12 @@ function processCards() {
 				const cardContainers = column.querySelectorAll('li');
 
 				if (cardContainers && cardContainers.length > 0) {
-					shouldRetry = false;
-
 					cardContainers.forEach((cardContainer) => {
 						const card = cardContainer.querySelector(':scope > div');
 						const contentDiv = card.querySelector(':scope > div');
 						
 						if (contentDiv) {
-							const labels = contentDiv.querySelectorAll('button');
+							const labels = card.querySelectorAll('span[data-testid="compact-card-label"]');
 
 							var colors = [];
 							labels.forEach((label) => {
@@ -99,14 +95,8 @@ function processCards() {
 			});
 		}
 	}
-	if (shouldRetry) {
-		timesTriedInit++;
-		if (timesTriedInit < 10000) {
-			setTimeout(() => {
-				processCards();
-			},250);
-		}
-	}
+}
+window.onload = () => {
 	document.addEventListener('keyup',() => {
 		clearTimeout(keyupTimeoutId);
 		keyupTimeoutId = setTimeout(() => {
@@ -114,4 +104,10 @@ function processCards() {
 		},250);
 	});
 }
-processCards();
+
+const observer = new MutationObserver((mutations) => {
+	processCards();
+});
+
+const targetNode = document.body; // getElementById('board');
+observer.observe(targetNode, { childList: true });
