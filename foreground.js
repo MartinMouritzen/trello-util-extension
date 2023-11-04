@@ -1,4 +1,4 @@
-let keyupTimeoutId = false;
+let updateCardsTimeoutId = false;
 
 function isRGBFormat(str) {
     const rgbPattern = /^rgb\(\s*\d{1,3}\s*,\s*\d{1,3}\s*,\s*\d{1,3}\s*\)$/;
@@ -96,18 +96,25 @@ function processCards() {
 		}
 	}
 }
+function initiateUpdate() {
+	clearTimeout(updateCardsTimeoutId);
+	updateCardsTimeoutId = setTimeout(() => {
+		processCards();
+	},250);
+}
+
 window.onload = () => {
 	document.addEventListener('keyup',() => {
-		clearTimeout(keyupTimeoutId);
-		keyupTimeoutId = setTimeout(() => {
-			processCards();
-		},250);
+		initiateUpdate();
 	});
 }
 
 const observer = new MutationObserver((mutations) => {
-	processCards();
+	initiateUpdate();
 });
 
 const targetNode = document.body; // getElementById('board');
-observer.observe(targetNode, { childList: true });
+observer.observe(targetNode, {
+	childList: true,
+	subtree: true
+});
