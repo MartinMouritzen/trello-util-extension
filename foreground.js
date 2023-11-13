@@ -71,9 +71,11 @@ function processCards() {
 								const textElement = contentDiv.querySelector('a');
 								const textColor = getContrastingTextColor(colors[0]);
 
-								textElement.style.color = textColor;
-								if (textColor == 'white') {
-									textElement.style.textShadow = '0px 1px 0px rgba(0,0,0,0.2)';
+								if (textElement) {
+									textElement.style.color = textColor;
+									if (textColor == 'white') {
+										textElement.style.textShadow = '0px 1px 0px rgba(0,0,0,0.2)';
+									}
 								}
 
 								if (colors.length == 1) {
